@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full overflow-hidden">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=auto">
+<title>JaferTik · Profile Hub</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+:root {
+--teal-glow: 0 0 0 1px rgba(20, 184, 166, 0.2);
+}
+body.theme-dark {
+--bg-primary: #042f2e;
+--bg-surface: #115e59;
+--bg-card: #134e4a;
+--text-primary: #ccfbf1;
+--text-secondary: #99f6e4;
+--border-color: #2c7a6e;
+--accent: #2dd4bf;
+--accent-hover: #5eead4;
+--code-bg: #0f3a36;
+--footer-bg: #0f2e2ccc;
+--header-border: #1f5c54;
+--modal-bg: #134e4a;
+--avatar-grad-start: #14b8a6;
+--avatar-grad-end: #0f766e;
+--stat-bg: #0f3a36;
+--table-header-bg: #1e6b63;
+--header-bg-gradient: linear-gradient(90deg, #042f2e, #115e59);
+--circle-bg: #0f3a36;
+--circle-stroke: #2dd4bf;
+--circle-letter: #2dd4bf;
+--title-gradient: linear-gradient(90deg, #2dd4bf, #5eead4);
+--subtitle-color: #99f6e4;
+--header-toggle-bg: #115e59;
+--header-toggle-hover: #0e4d48;
+
+--shadow-sm: 0 1px 3px rgba(0,0,0,0.4), 0 1px 1px rgba(0,255,255,0.05);
+--shadow-md: 0 4px 6px -1px rgba(0,0,0,0.5), 0 2px 4px -1px rgba(0,255,255,0.08);
+--shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.6), 0 4px 6px -2px rgba(0,255,255,0.1);
+--header-shadow: 0 2px 10px rgba(0,0,0,0.4), 0 1px 2px rgba(0,255,255,0.08);
+}
+body {
+background-color: var(--bg-primary);
+color: var(--text-primary);
+transition: background-color 0.2s ease, color 0.2s;
+font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+}
+.surface-card {
+background-color: var(--bg-surface);
+border-color: var(--border-color);
+box-shadow: var(--shadow-md);
+}
+.stat-card-bg {
+background-color: var(--stat-bg);
+}
+.avatar-teal-ring {
+background: linear-gradient(45deg, var(--avatar-grad-start), var(--avatar-grad-end));
+padding: 2.5px;
+border-radius: 50%;
+}
+.btn-teal {
+background-color: var(--accent);
+color: white;
+transition: all 0.15s;
+}
+.btn-teal:hover {
+background-color: var(--accent-hover);
+transform: translateY(-1px);
+}
+.btn-outline-teal {
+border: 1px solid var(--accent);
+color: var(--accent);
+background: transparent;
+}
+.btn-outline-teal:hover {
+background: var(--accent);
+color: white;
+}
+.footer-tab-btn {
+background: transparent;
+color: var(--text-secondary);
+transition: all 0.1s ease;
+font-weight: 500;
+}
+.footer-tab-btn.active {
+color: var(--accent);
+border-bottom: 2px solid var(--accent);
+background: transparent;
+}
+.custom-dialog {
+transition: opacity 0.2s, visibility 0.2s;
+box-shadow: var(--shadow-lg);
+}
+.modal-backdrop {
+background: rgba(0, 0, 0, 0.6);
+backdrop-filter: blur(3px);
+}
+.compact-scroll::-webkit-scrollbar {
+width: 4px;
+height: 4px;
+}
+.compact-scroll::-webkit-scrollbar-track {
+background: var(--border-color);
+border-radius: 6px;
+}
+.compact-scroll::-webkit-scrollbar-thumb {
+background: var(--accent);
+border-radius: 6px;
+}
+.stat-value {
+font-weight: 700;
+font-size: 1rem;
+}
+.stat-label {
+font-size: 0.65rem;
+letter-spacing: 0.3px;
+color: var(--text-secondary);
+}
+.header-border {
+border-color: var(--header-border);
+}
+.border-theme {
+border-color: var(--border-color);
+}
+.bg-code {
+background-color: var(--code-bg);
+}
+.text-secondary {
+color: var(--text-secondary);
+}
+.footer-bg {
+background-color: var(--footer-bg);
+}
+.modal-content {
+background-color: var(--modal-bg);
+border-color: var(--accent);
+}
+.tenure-text {
+color: var(--text-primary);
+}
+.opacity-50 {
+opacity: 0.5;
+}
+.spinner {
+display: inline-block;
+width: 0.9rem;
+height: 0.9rem;
+border: 2px solid rgba(255,255,255,0.3);
+border-radius: 50%;
+border-top-color: var(--accent);
+animation: spin 0.6s linear infinite;
+margin-right: 0.25rem;
+}
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
+button .spinner {
+border-top-color: white;
+border-right-color: white;
+}
+body.theme-light .spinner {
+border-top-color: var(--accent);
+}
+body.theme-dark .spinner {
+border-top-color: var(--accent);
+}
+.verified-badge {
+display: inline-block;
+vertical-align: super;
+font-size: 0.6rem;
+margin-left: 2px;
+}
+.verified-badge i {
+color: #20D5EC;
+background: transparent;
+filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
+}
+header {
+background: var(--header-bg-gradient);
+transition: background 0.2s;
+box-shadow: var(--header-shadow);
+border-bottom: 1px solid var(--header-border);
+}
+.logo-circle {
+width: 50px;
+height: 50px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+background: var(--circle-bg);
+border: 3px solid var(--circle-stroke);
+transition: all 0.2s;
+box-shadow: var(--shadow-sm);
+}
+.logo-letter {
+font-family: 'Georgia', 'Times New Roman', serif;
+font-size: 36px;
+font-weight: 900;
+color: var(--circle-letter);
+line-height: 1;
+transform: translateY(2px);
+}
+.title-main {
+font-family: 'Georgia', 'Times New Roman', serif;
+font-size: 1.5rem;
+font-weight: 900;
+background: var(--title-gradient);
+-webkit-background-clip: text;
+background-clip: text;
+color: transparent;
+letter-spacing: 1px;
+white-space: nowrap;
+}
+.title-sub {
+font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+font-size: 0.85rem;
+font-weight: 400;
+color: var(--subtitle-color);
+letter-spacing: 0.5px;
+white-space: nowrap;
+}
+@media (max-width: 640px) {
+.title-main {
+font-size: 1.1rem;
+white-space: normal;
+}
+.title-sub {
+font-size: 0.7rem;
+white-space: normal;
+}
+.logo-circle {
+width: 40px;
+height: 40px;
+}
+.logo-letter {
+font-size: 28px;
+}
+}
+.avatar-teal-ring {
+border: none;
+outline: none;
+}
+body.theme-dark {
+--avatar-placeholder-bg: #1f5c54; 
+}
+.avatar{
+border-color: var(--border-color);
+}
+.avatar div {
+border-color: var(--accent);
+}
+@keyframes shimmer {
+0% { background-position: 200% 0; }
+100% { background-position: -200% 0; }
+}
+body.theme-dark {
+--skeleton-gradient: linear-gradient(90deg, rgba(35,75,70,0.8) 0%, rgba(75,115,105,0.85) 50%, rgba(35,75,70,0.8) 100%);
+}
+.skeleton .shim {
+background: var(--skeleton-gradient);
+background-size: 200% 100%;
+animation: shimmer 2.5s infinite linear;
+color: transparent !important;
+border-radius: 0.25rem;
+}
+.skeleton .avatar .shim{
+border-radius: 50%;
+}
+.skeleton p.shim {
+opacity: 1!important;
+}
+.stat-value{
+font-size: 14px;
+}
+body.theme-dark {
+--card-gradient: linear-gradient(135deg, #115e59 0%, #0f5c54 100%);
+}
+body.theme-dark .surface-card {
+background: linear-gradient(90deg, #0f3a36 0%, #115e59 100%) !important;
+background-color: #115e59;
+}
+.skeleton .shim .stat-label{
+color: rgba(0, 0, 0, 0);
+}
+</style>
+</head>
+<body class="h-full overflow-hidden flex flex-col theme-dark">
+<header class="flex flex-none items-center justify-between px-3 py-2 border-b shadow-sm header-border">
+<div class="flex items-center gap-3">
+<div class="logo-circle">
+<span class="logo-letter">J</span>
+</div>
+<div class="flex flex-col">
+<h1 class="title-main">JaferTik Profile Hub</h1>
+<span class="title-sub">A TikTok User's Profile Stats Viewer</span>
+</div>
+</div>
+</header>
+
+<main class="flex-1 flex flex-col min-h-0 overflow-hidden px-2 py-2 md:px-3">
+<div class="relative flex-1 overflow-hidden">
+<div id="paneProfile" class="tab-pane w-full h-full overflow-y-auto compact-scroll p-1 transition-all skeleton">
+<div class="surface-card rounded-2xl border shadow-md p-4 border-theme relative">
+<div class="flex flex-col items-center text-center">
+<div id="nicknameSpan" class="flex flex-wrap items-center justify-center gap-1 text-xs mb-1 text-secondary min-h-[16px] min-w-[50%] shim"></div>
+<div id="tenureContainer" class="flex flex-wrap justify-center gap-x-2 gap-y-1 text-xs font-mono mb-3 tenure-text min-h-[16px] min-w-[50%] shim">
+<span id="year"></span>
+<span id="month"></span>
+<span id="day"></span>
+</div>
+
+<div class="avatar w-22 h-22 rounded-full border-2 p-1" style="padding: 2px;">
+<div class="avatar-teal-ring w-full h-full rounded-full border flex items-center justify-center overflow-hidden shim" style="border-width:1px">
+<img id="profileAvatar" class="w-20 h-20 rounded-full object-cover" src="https://via.placeholder.com/96" alt="" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2296%22%20height%3D%2296%22%20viewBox%3D%220%200%2096%2096%22%3E%3Crect%20width%3D%2296%22%20height%3D%2296%22%20fill%3D%22transparent%22%2F%3E%3C%2Fsvg%3E';" alt="">
+</div>
+</div>
+
+<div class="min-w-[50%] flex flex-col justify-between gap-1 mt-1">
+<div class="flex items-center justify-center min-h-[28px] min-w-[50%] shim">
+<h2 id="profileNickname" class="font-bold text-lg truncate"></h2>
+</div>
+<p class="text-sm opacity-75 mb-1 inline-flex items-center justify-center gap-1 min-h-[20px] min-w-[50%] shim">
+<span id="profileUniqueId"></span>
+<span id="verifiedHandleBadge" class="verified-badge hidden"><i class="fas fa-check-circle"></i></span>
+</p>
+</div>
+<!-- Admin badge -->
+<div id="adminBadge" class="hidden text-xs bg-amber-500 text-black px-2 py-1 rounded-full inline-block mb-2"></div>
+
+<div class="grid grid-cols-5 gap-3 w-full max-w-md mx-auto py-2 stat-card-bg rounded-xl p-2 mt-1">
+<div class="text-center shim"><div class="stat-value min-h-[21px]" id="statFollowing"></div><div class="stat-label">Following</div></div>
+<div class="text-center shim"><div class="stat-value min-h-[21px]" id="statFollowers"></div><div class="stat-label">Followers</div></div>
+<div class="text-center shim"><div class="stat-value min-h-[21px]" id="statFriends"></div><div class="stat-label">Friends</div></div>
+<div class="text-center shim"><div class="stat-value min-h-[21px]" id="statVideos"></div><div class="stat-label">Videos</div></div>
+<div class="text-center shim"><div class="stat-value min-h-[21px]" id="statLikes"></div><div class="stat-label">Likes</div></div>
+</div>
+
+</div>
+
+<div class="flex flex-nowrap items-center justify-between mt-3 text-center text-[10px] text-secondary min-h-[20px] shim">
+<div class="flex-2 text-left inline-flex items-center gap-2 bg-code px-3 rounded-full text-sm">
+<span id="regionFlag"></span>
+<span id="regionName" class="hidden"></span>
+<span id="regionCode" class="text-xs opacity-70"></span>
+</div>
+<div class="flex-1 gap-2 text-right px-3">
+<span id="profileTimestamp" class="mx-auto"></span>
+</div>
+</div>
+<div class="rounded-2xl border shadow-md p-4 border-theme absolute top-0 left-0 w-full h-full skeleton hidden"></div>
+</div>
+
+<div class="mt-8 text-center text-[10px] opacity-50 text-secondary"></div>
+
+<div class="surface-card rounded-2xl border shadow-md p-4 space-y-4 border-theme">
+<div class="space-y-3">
+<div class="hidden">
+<label class="block text-xs font-medium mb-1"><i class="fas fa-globe"></i> Base URL</label>
+<input type="text" id="baseUrl" class="w-full px-3 py-1.5 rounded-lg text-sm border focus:outline-none bg-code border-theme text-primary" value="https://jfr-tik-worker.otapt2011.workers.dev">
+</div>
+<div class="flex flex-row flex-nowrap gap-2 w-full">
+<div class="flex-1">
+<label class="block text-xs font-medium mb-1"><i class="fas fa-key"></i> Your access key</label>
+<input type="text" id="userKeyInput" class="w-full px-3 py-1.5 rounded-lg text-sm border focus:outline-none bg-code border-theme text-primary" placeholder="Enter your key">
+</div>
+<div class="flex-1">
+<label class="block text-xs font-medium mb-1"><i class="fab fa-tiktok"></i> TikTok username</label>
+<input type="text" id="username" class="w-full px-3 py-1.5 rounded-lg text-sm border focus:outline-none bg-code border-theme text-primary" placeholder="e.g., tiktok">
+</div>
+</div>
+</div>
+
+<div class="flex flex-nowrap items-center justify-between">
+<button id="fetchBtn" class="flex-1 btn-outline-teal text-xs p-2 rounded-lg flex items-center justify-center gap-1"><i class="fa-solid fa-download"></i> Get Profile</button>
+</div>
+</div>
+
+</div>
+</div>
+</main>
+
+<footer class="flex-none flex justify-around items-center py-1.5 px-2 border-t surface-card gap-1 header-border footer-bg">
+<button data-tab="profile" class="footer-tab-btn active flex flex-col items-center py-1 px-3 rounded-lg text-xs transition-all hidden"><i class="fas fa-user-circle text-base"></i><span class="text-[10px] mt-0.5">Profile</span></button>
+<button data-tab="config" class="footer-tab-btn flex flex-col items-center py-1 px-3 rounded-lg text-xs transition-all hidden"><i class="fas fa-sliders-h text-base"></i><span class="text-[10px] mt-0.5">Config</span></button>
+</footer>
+
+<!-- Custom dialog for error/info messages -->
+<div id="customDialog" class="custom-dialog fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 transition-all duration-200">
+<div class="modal-backdrop absolute inset-0"></div>
+<div class="relative w-72 max-w-[85%] rounded-2xl shadow-2xl p-4 surface-card border mx-auto modal-content">
+<div class="flex justify-between items-center mb-2"><h3 id="dialogTitle" class="font-bold text-md flex items-center gap-2"><i class="fas fa-bell"></i> Notice</h3><button id="closeDialogBtn" class="text-gray-500 hover:text-gray-700 dark:text-gray-300 text-xl leading-5">&times;</button></div>
+<p id="dialogMessage" class="text-sm py-2 break-words"></p>
+<div class="flex justify-end mt-3"><button id="dialogOkBtn" class="btn-teal text-xs px-5 py-1.5 rounded-lg">Okay</button></div>
+</div>
+</div>
+
+<!-- External country flags module -->
+<script src="countryInfo.js"></script>
+
+<script>
+(function() {
+    // DOM elements
+    const pane = document.getElementById('paneProfile');
+    const profileAvatar = document.getElementById('profileAvatar');
+    const profileNickname = document.getElementById('profileNickname');
+    const profileUniqueId = document.getElementById('profileUniqueId');
+    const nicknameSpan = document.getElementById('nicknameSpan');
+    const statFollowers = document.getElementById('statFollowers');
+    const statFollowing = document.getElementById('statFollowing');
+    const statFriends = document.getElementById('statFriends');
+    const statLikes = document.getElementById('statLikes');
+    const statVideos = document.getElementById('statVideos');
+    const profileTimestamp = document.getElementById('profileTimestamp');
+    const verifiedHandleBadge = document.getElementById('verifiedHandleBadge');
+    const baseUrlInput = document.getElementById('baseUrl');
+    const usernameInput = document.getElementById('username');
+    const userKeyInput = document.getElementById('userKeyInput');
+    const fetchBtn = document.getElementById('fetchBtn');
+    const tYears = document.getElementById('year');
+    const tMonths = document.getElementById('month');
+    const tDays = document.getElementById('day');
+    const adminBadge = document.getElementById('adminBadge');
+
+    // Region container elements
+    const regionFlagSpan = document.getElementById('regionFlag');
+    const regionNameSpan = document.getElementById('regionName');
+    const regionCodeSpan = document.getElementById('regionCode');
+
+    const WORKER_BASE = 'https://jfr-tik-worker.otapt2011.workers.dev';
+    baseUrlInput.value = WORKER_BASE;
+
+    function getStoredKey() { return localStorage.getItem('userKey'); }
+    function setStoredKey(key) { localStorage.setItem('userKey', key); }
+    function clearStoredKey() { localStorage.removeItem('userKey'); }
+
+    const storedKey = getStoredKey();
+    if (storedKey) userKeyInput.value = storedKey;
+
+    function fmtNum(k) {
+        const n = Number(k);
+        if (isNaN(n)) return '0';
+        if (n >= 1e6) return (n/1e6).toFixed(1).replace(/\.0$/,'') + 'M';
+        if (n >= 1e3) return (n/1e3).toFixed(1).replace(/\.0$/,'') + 'K';
+        return n.toString();
+    }
+
+    function updateTenure(createTime, fetchTime) {
+        const start = new Date(createTime * 1000);
+        const end = new Date(fetchTime);
+        let y = end.getFullYear() - start.getFullYear();
+        let m = end.getMonth() - start.getMonth();
+        let d = end.getDate() - start.getDate();
+        if (d < 0) { m--; d += new Date(end.getFullYear(), end.getMonth(), 0).getDate(); }
+        if (m < 0) { y--; m += 12; }
+        if (y > 0) tYears.innerHTML = y + (y === 1 ? '<span class="text-teal-400">yr</span>' : '<span class="text-teal-400">yrs</span>');
+        if (m > 0) tMonths.innerHTML = m + (m === 1 ? '<span class="text-teal-400">month</span>' : '<span class="text-teal-400">months</span>');
+        if (d > 0) tDays.innerHTML = d + (d === 1 ? '<span class="text-teal-400">day</span>' : '<span class="text-teal-400">days</span>');
+    }
+
+    function updateProfile(profile, regionCode) {
+        if (!profile?.uniqueId) return;
+        profileAvatar.src = profile.avatarLarger || profile.avatarMedium || profile.avatarThumb || 'https://via.placeholder.com/96';
+        profileNickname.innerText = profile.nickname || profile.uniqueId;
+        profileUniqueId.innerHTML = `@${profile.uniqueId}`;
+        nicknameSpan.innerHTML = '<span class="font-bold text-teal-500">' + profile.uniqueId + '</span><span> was on TikTok for</span>';
+        statFollowers.innerHTML = fmtNum(profile.followerCount);
+        statFollowing.innerHTML = fmtNum(profile.followingCount);
+        statFriends.innerHTML = (profile.friendCount || 0).toLocaleString();
+        statLikes.innerHTML = fmtNum(profile.heartCount);
+        statVideos.innerHTML = (profile.videoCount || 0).toLocaleString();
+        if (profile.verified) verifiedHandleBadge.classList.remove('hidden');
+        else verifiedHandleBadge.classList.add('hidden');
+        if (profile.createTime && profile.timestamp) updateTenure(profile.createTime, profile.timestamp);
+        profileTimestamp.innerHTML = `<i class="far fa-clock mr-1"></i><span>${new Date(profile.timestamp).toLocaleString()}</span>`;
+
+        // Region handling
+        if (regionCode) {
+            const info = CountryFlags.getCountryInfo(regionCode);
+            if (info) {
+                regionFlagSpan.innerText = info.flag;
+                regionNameSpan.innerText = info.name;
+                regionCodeSpan.innerText = info.code;
+            }
+        }
+    }
+
+    function resetProfile() {
+        //profileAvatar.src = 'https://via.placeholder.com/96';
+        profileAvatar.src = 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2296%22%20height%3D%2296%22%20viewBox%3D%220%200%2096%2096%22%3E%3Crect%20width%3D%2296%22%20height%3D%2296%22%20fill%3D%22transparent%22%2F%3E%3C%2Fsvg%3E';
+        profileAvatar.alt = '';
+        profileNickname.innerText = '__';
+        profileUniqueId.innerHTML = '__';
+        nicknameSpan.innerHTML = '';
+        statFollowers.innerHTML = '—';
+        statFollowing.innerHTML = '—';
+        statFriends.innerHTML = '—';
+        statLikes.innerHTML = '—';
+        statVideos.innerHTML = '—';
+        verifiedHandleBadge.classList.add('hidden');
+        tYears.innerHTML = '';
+        tMonths.innerHTML = '';
+        tDays.innerHTML = '';
+        profileTimestamp.innerHTML = '';
+        regionFlagSpan.innerText = '';
+        regionNameSpan.innerText = '';
+        regionCodeSpan.innerText = '';
+        //adminBadge.classList.add('hidden');
+        //adminBadge.innerHTML = '';
+        if (pane) pane.classList.add('skeleton');
+    }
+
+    const dialog = document.getElementById('customDialog');
+    const dialogTitle = document.getElementById('dialogTitle');
+    const dialogMsg = document.getElementById('dialogMessage');
+    function dialogShow(title, msg, isErr) {
+        dialogTitle.innerHTML = isErr ? `<i class="fas fa-exclamation-triangle text-amber-500"></i> ${title}` : `<i class="fas fa-check-circle text-teal-500"></i> ${title}`;
+        dialogMsg.innerText = msg;
+        dialog.classList.remove('invisible', 'opacity-0');
+        dialog.classList.add('visible', 'opacity-100');
+    }
+    function dialogHide() {
+        dialog.classList.add('invisible', 'opacity-0');
+        dialog.classList.remove('visible', 'opacity-100');
+    }
+    document.getElementById('closeDialogBtn')?.addEventListener('click', dialogHide);
+    document.getElementById('dialogOkBtn')?.addEventListener('click', dialogHide);
+    dialog?.addEventListener('click', (e) => { if (e.target === dialog) dialogHide(); });
+
+    async function fetchProfile() {
+        resetProfile();
+        const userKey = userKeyInput.value.trim();
+        const username = usernameInput.value.trim();
+        const baseUrl = baseUrlInput.value.trim().replace(/\/$/, '');
+
+        if (!userKey) { dialogShow('Missing Key', 'Please enter your access key.', true); return; }
+        if (!username) { dialogShow('Missing Username', 'Please enter a TikTok username.', true); return; }
+        if (!baseUrl) { dialogShow('Missing Base URL', 'Worker URL is missing.', true); return; }
+
+        fetchBtn.disabled = true;
+        const origHtml = fetchBtn.innerHTML;
+        fetchBtn.innerHTML = '<span class="spinner"></span> Fetching...';
+
+        try {
+            const res = await fetch(`${baseUrl}/api/user/${username}`, {
+                headers: { 'X-User-Key': userKey }
+            });
+            const isAdmin = res.headers.get('X-Admin-Mode') === 'true';
+            const requestedUsername = res.headers.get('X-Requested-Username');
+            if (isAdmin) {
+                //adminBadge.classList.remove('hidden');
+                //adminBadge.innerHTML = `👑 Admin mode | You fetched: @${requestedUsername}`;
+            } else {
+                //adminBadge.classList.add('hidden');
+            }
+
+            if (res.status === 401) {
+                clearStoredKey();
+                dialogShow('Invalid Key', 'Your access key is invalid or expired. Please check and try again.', true);
+                userKeyInput.value = '';
+                fetchBtn.disabled = false;
+                return;
+            }
+            if (res.status === 403) {
+                const errorData = await res.json();
+                const msg = errorData.error || 'Your key does not grant access to this username.';
+                dialogShow('Access Denied', msg, true);
+                fetchBtn.disabled = false;
+                return;
+            }
+            if (!res.ok) throw new Error(`HTTP ${res.status}: ${await res.text()}`);
+
+            setStoredKey(userKey);
+            const json = await res.json();
+            if (!json?.data?.userInfo?.user) throw new Error('Invalid API response');
+
+            const u = json.data.userInfo.user;
+            const s = json.data.userInfo.statsV2 || {};
+
+            // Extract region from response
+            let regionCode = json.region || json.data?.userInfo?.user?.region || null;
+
+            const profile = {
+                uniqueId: u.uniqueId, nickname: u.nickname,
+                avatarLarger: u.avatarLarger, avatarMedium: u.avatarMedium, avatarThumb: u.avatarThumb,
+                createTime: u.createTime, verified: u.verified,
+                followerCount: s.followerCount || 0, followingCount: s.followingCount || 0,
+                heartCount: s.heartCount || 0, videoCount: s.videoCount || 0,
+                friendCount: s.friendCount || 0,
+                timestamp: json.timestamp || Date.now()
+            };
+            updateProfile(profile, regionCode);
+            pane.classList.remove("skeleton");
+        } catch (err) {
+            console.error(err);
+            dialogShow('Network Error', `Failed to fetch: ${err.message}. Check your worker URL and internet connection.`, true);
+        } finally {
+            fetchBtn.innerHTML = origHtml;
+            fetchBtn.disabled = false;
+        }
+    }
+
+    fetchBtn.addEventListener('click', fetchProfile);
+ 
+//usernameInput.addEventListener('focus', resetProfile);
+
+resetProfile();
+})();
+</script>
+</body>
+</html>
